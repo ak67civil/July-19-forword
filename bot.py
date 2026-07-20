@@ -612,12 +612,12 @@ async def run_forward_job(client: Client, uid: int, temp: dict):
 
     # Save job to DB
     with db() as c:
-        c.execute(
+        cur = c.execute(
             "INSERT INTO forward_jobs(admin_id,source_id,target_id,topic_id,from_msg,to_msg,status,created_at) "
             "VALUES(?,?,?,?,?,?,?,?)",
             (uid, str(source), str(target), topic_id, from_msg, to_msg, "running", int(time.time()))
         )
-        job_id = c.lastrowid
+        job_id = cur.lastrowid
         c.commit()
 
     total     = to_msg - from_msg + 1
